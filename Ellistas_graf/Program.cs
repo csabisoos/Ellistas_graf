@@ -15,7 +15,7 @@ namespace Ellistas_graf
             private List<List<int>> ellista;
             public int csucsszam;
             public int elszam;
-            public Ellistas_graf()
+            public Ellistas_graf()//konstruktor
             {
                 ellista = new List<List<int>>();
                 csucsszam = 0;
@@ -36,12 +36,56 @@ namespace Ellistas_graf
             }
             public string Graphviz_output()
             {
+                string result = "graph G {\n";
+                foreach (List<int> el in ellista)
+                {
+                    result += "\t" + el[0] + " -- " + el[1] + ";\n";
+                }
+                return result + "}";
+            }
+            public bool Van_el(int a, int b)
+            {
+                for (int i = 0; i < ellista.Count; i++)
+                {
+                    if (ellista[i][0] == a && ellista[i][1] == b)
+                        return true;
 
+                    else if(ellista[i][0] == b && ellista[i][1] == a)
+                        return true;
+                }
+                return false;
+            }
+            public int Fokszam(int a)
+            {
+                if (!Vane(a))
+                {
+                    return -1;
+                }
+                int db = 0;
+                for (int i = 0; i < ellista.Count; i++)
+                {
+                    if (ellista[i][0] == a)
+                        db++;
+                    if (ellista[i][1] == a)
+                        db++;
+                }
+                return db;
+            }
+            public bool Vane(int a)
+            {
+                return a < csucsszam;
+            }
+            public bool Izolalt(int a)
+            {
+                return Fokszam(a) == 0;
             }
         }
         static void Main(string[] args)
         {
             Ellistas_graf graf = new Ellistas_graf();
+            graf.Mesteres_feltoltes();
+            Console.WriteLine(graf.Graphviz_output());
+            Console.ReadKey();
         }
     }
 }
